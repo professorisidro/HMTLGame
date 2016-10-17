@@ -1,0 +1,79 @@
+
+<html>
+<head> 
+	 <title> .: Meu primeiro Game :. </title> 
+	 <script type="text/javascript" src="engine.js"> </script>
+	 <script type="text/javascript" src="heroi.js"> </script>
+	 <script type="text/javascript" src="cenario.js"> </script>
+	 <script type="text/javascript" src="teclado.js"> </script>
+         <script type="text/javascript" src="troll.js"> </script>
+	 
+</head>
+<body >
+
+    <canvas id="mycanvas" width="400" height="300" > 
+    </canvas>
+    <script>
+        var context;
+        var canvas;
+        var cenario;
+        var heroi;
+        var cenario;
+        var teclado;
+        var troll;
+        var score = 0;
+        canvas  = document.getElementById("mycanvas");
+        context = canvas.getContext('2d'); 
+        teclado = new Teclado(document);
+
+        
+
+        heroi   = new Heroi(context, teclado);
+        cenario = new Cenario(context);
+        troll   = new Troll(context);
+
+        // preciso disso para fazer o loop do jogo
+        requestAnimationFrame(loopDoJogo);
+
+        function loopDoJogo(){
+
+        	cenario.desenha(); 
+                context.font = "20px Verdana";
+                context.fillText("Score = "+score, 50, 29);        
+
+        	heroi.update();
+                troll.update();
+        	heroi.desenha();
+
+                if (!troll.pegou()) troll.desenha();
+                if (heroi.getX() == 100){
+                   console.log("DEBUG "+heroi.getX() + ","+heroi.getY()+" - " + heroi.getWidth() + ","+ heroi.getHeight());
+                   console.log("DEBUG "+troll.getX() + ","+troll.getY()+" - " + troll.getWidth() + ","+ troll.getHeight());
+                }
+
+                if (! troll.pegou()){
+
+                // regra da colisao
+                if (heroi.getX() + heroi.getWidth() > troll.getX()){
+      		    var topo = heroi.getY();
+                    var base = heroi.getY() + heroi.getHeight();
+                    if ((topo >= troll.getY() && topo <= (troll.getY() + troll.getHeight()))
+                        ||
+                        (base >= troll.getY() && base <= (troll.getY() + troll.getHeight()))){
+                        console.log("Colidiu");
+                        score++;
+                        troll.atingir();
+                        troll.respawn();
+                    }                
+                }
+                }
+
+        	
+        	requestAnimationFrame(loopDoJogo);
+        }
+
+
+    </script>
+
+</body>
+</html>
