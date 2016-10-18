@@ -1,58 +1,71 @@
-
 function Heroi(context, teclado){
+	this.context = context;
+	this.x = 0;
+	this.y = 50;
+	this.estado  = 0; // parado
 
-    this.context = context;
-    this.teclado = teclado;	
-    this.imagem  = new Image();
-    this.imagem.src = "images/alfredo.png";
-    this.x       = 0;
-    this.y       = 100;
-    this.estado  = 0; // parado
+	this.image = new Image();
+	this.image.src = "images/alfredo.png";
+
+	this.teclado = teclado;
 }
 
- Heroi.prototype = {
-        update: function(){
-        	//console.log("update no heroi");
-        	if (this.estado == 1){
-        		this.x+=10;
-        	}
-        	if (this.x >= 500){
-        		this.estado = 0; // passei da tela
-        		this.x = 0;
-        	}
-        	if (this.teclado.pressionada(32)){
-        		//console.log("foi");
-        		this.estado = 1;
-        	}
-        	if (this.teclado.pressionada(40)){
-        		this.y += 10;
-        	}
-        	if (this.teclado.pressionada(38)){
-        		this.y -= 10;
-        	}
-        },
+Heroi.prototype = {
+   update: function(){
+   	   if (this.teclado.atirou()){
+   	   	   this.estado = 1; // movimento
+   	   }
+   	   if (this.teclado.subiu()){
+   	   	  // console.log("subiu...");
+   	       this.y -= 5;
+   	   }
+   	   if (this.teclado.desceu()){
+   	   	  // console.log("desceu...");
+   	   	   this.y += 5;
+   	   }
 
-        desenha: function(){
-        	//console.log("desenha heroi");
-        	this.context.drawImage(this.imagem, 0,0,this.imagem.width, this.imagem.height, 
-        		     this.x,this.y, this.imagem.width, this.imagem.height );
+   	   if (this.estado == 1){
+   	   	   this.x += 5;
+   	   }
 
-        },
+   	   if (this.x >= 400){
+   	   	   this.x = 0;
+   	   	   this.estado = 0;
+   	   }
 
-     
-        getX: function(){
-        	//console.log("Valor do x="+this.x);
-        	return this.x;
-        },
-        getY: function(){
-              return this.y;
-        },
+   },
+   draw: function(){
+   	  this.context.drawImage(this.image, 0, 0, this.image.width, this.image.height,
+   	  	                     this.x, this.y, this.image.width/3, this.image.height/3);
+   },
 
-        getWidth: function(){
-              return this.imagem.width;
-        },
-        getHeight: function(){
-              return this.imagem.height;
-        }
-    }
+   getX: function(){
+   	  return this.x;
+   },
+   getY: function(){
+   	  return this.y;
+   },
+   getWidth: function(){
+   	  return this.image.width/3;
+   },
+   getHeight: function(){
+   	  return this.image.height/3;
+   }
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
